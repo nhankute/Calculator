@@ -1,0 +1,362 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.nhan.calculator.TriangleFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/colorLightGrey"
+
+        android:paddingTop="7dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorWhite"
+            android:src="@drawable/triangle"
+            android:layout_alignParentTop="true"/>
+
+        <ScrollView
+            android:id="@+id/scrollview"
+            android:layout_width="match_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/imageView"
+            android:layout_marginBottom="52dp">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/side_a_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Side a:"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_side_a_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/side_a_triangle"
+                        android:layout_toStartOf="@+id/spinner_a_triangle"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_a_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/unit_array"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/side_b_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Side b:"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_side_b_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/side_b_triangle"
+                        android:layout_toStartOf="@+id/spinner_b_triangle"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_b_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/unit_array"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/side_c_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Side c:"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_side_c_triangle"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/side_c_triangle"
+                        android:layout_toStartOf="@+id/spinner_c_triangle"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_c_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/unit_array"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/angle_a"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Angle A:"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_angle_a"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/angle_a"
+                        android:layout_toStartOf="@+id/spinner_angle_a"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_angle_a"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/radius_aray"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/angle_b"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Angle B:"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16dp" />
+
+                    <EditText
+                        android:id="@+id/edt_angle_b"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/angle_b"
+                        android:layout_toStartOf="@+id/spinner_angle_b"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_angle_b"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/radius_aray"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/angle_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Angle C:"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_angle_c"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/angle_c"
+                        android:layout_toStartOf="@+id/spinner_angle_c"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_angle_c"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/radius_aray"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/perimeter_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Perimeter :"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_perimeter_triangle"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/perimeter_triangle"
+                        android:layout_toStartOf="@+id/spinner_perimeter_triangle"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_perimeter_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/unit_array"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/area_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="Area :"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_area_triangle"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/area_triangle"
+                        android:layout_toStartOf="@+id/spinner_area_triangle"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_area_triangle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/area_array"></Spinner>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/colorWhite">
+
+                    <TextView
+                        android:id="@+id/ha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="ha :"
+                        android:textColor="@android:color/holo_blue_dark"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edt_ha"
+                        android:layout_width="50dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_toEndOf="@+id/ha"
+                        android:layout_toStartOf="@+id/spinner_ha"
+                        android:inputType="numberDecimal" />
+
+                    <Spinner
+                        android:id="@+id/spinner_ha"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:entries="@array/area_array"/>
+
+                </RelativeLayout>
+
+            </TableLayout>
+        </ScrollView>
+
+        <RelativeLayout
+            android:id="@+id/relative_bt"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="5dp">
+
+            <Button
+                android:id="@+id/bt_solve_triangle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_marginLeft="55dp"
+                android:text="Solve" />
+
+            <Button
+                android:id="@+id/bt_clean_triangle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="55dp"
+                android:text="Clean" />
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+</FrameLayout>

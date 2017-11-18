@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">Calculator</string>
+    <string name="title_circle">Circle</string>
+    <string name="title_triangle">Triangle</string>
+    <string name="title_rectangle">Rectangle</string>
+
+    <string-array name="unit_array">
+        <item>mm</item>
+        <item>cm</item>
+        <item>m</item>
+        <item>km</item>
+    </string-array>
+
+    <string-array name="radius_aray">
+        <item>radius</item>
+        <item>circle</item>
+        <item>minute</item>
+        <item>steradian</item>
+    </string-array>
+
+    <string-array name="area_array">
+        <item>mm^2</item>
+        <item>cm^2</item>
+        <item>m^2</item>
+        <item>km^2</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>
