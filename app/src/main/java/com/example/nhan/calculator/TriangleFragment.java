@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.BitSet;
+import java.util.Vector;
 import java.util.zip.DeflaterOutputStream;
 
 
@@ -34,21 +36,19 @@ public class TriangleFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private double side_a, side_b, side_c, angel_A, angel_B, angel_C, area, perimeter, ha;
+    private static Vector<Integer> BinaryCheckList = new Vector<>(9);
+
+
     private OnFragmentInteractionListener mListener;
 
     public TriangleFragment() {
         // Required empty public constructor
+        BinaryCheckList = new Vector<>(9);
+        for (int i =0; i <9; i++)
+            BinaryCheckList.add(i, 0);
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment TriangleFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static TriangleFragment newInstance(String param1, String param2) {
         TriangleFragment fragment = new TriangleFragment();
         Bundle args = new Bundle();
@@ -68,7 +68,7 @@ public class TriangleFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_triangle, container, false);
         final EditText Side_a = view.findViewById(R.id.edt_side_a_triangle);
@@ -84,504 +84,422 @@ public class TriangleFragment extends Fragment {
         final Button Solve = view.findViewById(R.id.bt_solve_triangle);
         final Button Clean = view.findViewById(R.id.bt_clean_triangle);
 
+        Clean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                for (int i =0; i <9; i++)
+                    BinaryCheckList.add(i, 0);
+                Side_a.setText("");
+                Side_b.setText("");
+                Side_c.setText("");
+                Angle_a.setText("");
+                Angle_b.setText("");
+                Angle_c.setText("");
+                Area.setText("");
+                Perimeter.setText("");
+                Ha.setText("");
+            }
+        });
+
         Solve.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                double side_a, side_b, side_c, angle_A, angle_B, angle_C, area, perimeter, ha;
-                if(Side_a.length() == 0)
-                {
-                    if(Side_b.length() == 0)
-                    {
-                        if(Side_c.length() == 0)
-                        {
-                            if (Angle_a.length() == 0)
-                            {
-                                if (Angle_b.length() == 0)
-                                {
-                                    if (Angle_c.length() == 0)
-                                    {
-                                        if (Area.length() == 0)
-                                        {
-                                            if(Perimeter.length() == 0 && Ha.length() == 0)
-                                                Toast.makeText(getActivity(), "Sir, we got nothing to solve !", Toast.LENGTH_LONG).show();
-                                            else
-                                                Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                        }
-                                        else {
-                                            area = Double.parseDouble(Area.getText().toString());
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                }
-                                            }
-                                            else{
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if (Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        angle_C = Double.parseDouble(Angle_c.getText().toString());
-                                        if (Area.length() == 0)
-                                        {
-                                            Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                        }
-                                        else {
-                                            area = Double.parseDouble(Area.getText().toString());
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_b = (2*area)/(side_a*Math.sin(angle_C));
-                                                    side_c = Math.sqrt( side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_C));
-                                                    perimeter = side_a + side_b + side_c;
-                                                    angle_B = Math.asin( (side_b*Math.sin(angle_C)) / side_c);
-                                                    angle_A = Math.PI - angle_B - angle_C;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_b.setText(String.valueOf(angle_B));
-                                                    Perimeter.setText(String.valueOf(perimeter));
-                                                }
-                                            }
-                                            else{
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if (Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_b = (2*area)/(side_a*Math.sin(angle_C));
-                                                    side_c = Math.sqrt( side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_C));
-                                                    angle_B = Math.asin( (side_b*Math.sin(angle_C)) / side_c);
-                                                    angle_A = Math.PI - angle_B - angle_C;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_b.setText(String.valueOf(angle_B));
-                                                }
-                                            }
-                                        }
-                                    }//Angle_C
-                                }
-                                else {
-                                    angle_B = Double.parseDouble(Angle_b.getText().toString());
-                                    if (Angle_c.length() == 0)
-                                    {
-                                        if (Area.length() == 0)
-                                        {
-                                                Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                        }
-                                        else {
-                                            area = Double.parseDouble(Area.getText().toString());
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_c = (2*area)/(side_a*Math.sin(angle_B));
-                                                    side_b = Math.sqrt( side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_B));
-                                                    perimeter = side_a + side_b + side_c;
-                                                    angle_A = Math.asin( (side_a*Math.sin(angle_B)) / side_b);
-                                                    angle_C = Math.PI - angle_A - angle_B;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Perimeter.setText(String.valueOf(perimeter));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_c.setText(String.valueOf(angle_C));
-                                                }
-                                            }
-                                            else{
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_c = (2*area)/(side_a*Math.sin(angle_B));
-                                                    side_b = Math.sqrt( side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_B));
-                                                    angle_A = Math.asin( (side_a*Math.sin(angle_B)) / side_b);
-                                                    angle_C = Math.PI - angle_A - angle_B;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_c.setText(String.valueOf(angle_C));
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        angle_C = Double.parseDouble(Angle_c.getText().toString());
-                                        if (Area.length() == 0)
-                                        {
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if (Ha.length() == 0)
-                                                {
-                                                    angle_A = Math.PI - angle_B - angle_C;
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                }
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    angle_A = Math.PI - angle_B - angle_C;
-                                                    side_a = ha/Math.tan(angle_B) + ha/Math.tan(angle_C);
-                                                    area = 1/2 * side_a*ha;
-                                                    side_c = (2*area)/(side_a*Math.sin(angle_B));
-                                                    side_b = Math.sqrt( side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_B));
-                                                    perimeter = side_a + side_b + side_c;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Area.setText(String.valueOf(area));
-                                                    Perimeter.setText(String .valueOf(perimeter));
-                                                }
-                                            }
-                                            else {
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if (Ha.length() == 0)
-                                                {
-                                                    angle_A = Math.PI - angle_B - angle_C;
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                }
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    angle_A = Math.PI - angle_B - angle_C;
-                                                    side_a = ha/Math.tan(angle_B) + ha/Math.tan(angle_C);
-                                                    area = 1/2 * side_a*ha;
-                                                    side_c = (2*area)/(side_a*Math.sin(angle_B));
-                                                    side_b = Math.sqrt( side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_B));
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Area.setText(String.valueOf(area));
-                                                }
-                                            }
-                                        }
-                                        else {
-                                            area = Double.parseDouble(Area.getText().toString());
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_b = (2*area)/(side_a*Math.sin(angle_C));
-                                                    side_c = Math.sqrt( side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_C));
-                                                    perimeter = side_a + side_b + side_c;
-                                                    angle_B = Math.asin( (side_b*Math.sin(angle_C)) / side_c);
-                                                    angle_A = Math.PI - angle_B - angle_C;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_b.setText(String.valueOf(angle_B));
-                                                    Perimeter.setText(String.valueOf(perimeter));
-                                                }
-                                            }
-                                            else{
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if (Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_b = (2*area)/(side_a*Math.sin(angle_C));
-                                                    side_c = Math.sqrt( side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_C));
-                                                    angle_B = Math.asin( (side_b*Math.sin(angle_C)) / side_c);
-                                                    angle_A = Math.PI - angle_B - angle_C;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_b.setText(String.valueOf(angle_B));
-                                                }
-                                            }
-                                        }
-                                    }//Angle_C
-                                }
+                boolean loop = true;
+                while(loop){
+                    loop = false;
+                    //A + B + C = 180
+                    if (BinaryCheckList.get(3) + BinaryCheckList.get(4) + BinaryCheckList.get(5) == 2){
+                        loop = true;
+                        if (BinaryCheckList.get(3) == 0){
+                            angel_A = 180 - angel_B - angel_C;
+                            if (angel_A <= 0 || angel_A > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that A+B+C = 180", Toast.LENGTH_LONG).show();
+                            else{
+                                Angle_a.setText(String.valueOf(angel_A));
                             }
-                            else {
-                                angle_A = Double.parseDouble(Angle_a.getText().toString());
-                                if (Angle_b.length() == 0)
-                                {
-                                    if (Angle_c.length() == 0)
-                                    {
-                                        if (Area.length() == 0)
-                                        {
-                                            Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                        }
-                                        else {
-                                            area = Double.parseDouble(Area.getText().toString());
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                }
-                                            }
-                                            else{
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if (Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        angle_C = Double.parseDouble(Angle_c.getText().toString());
-                                        if (Area.length() == 0)
-                                        {
-                                            Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                        }
-                                        else {
-                                            area = Double.parseDouble(Area.getText().toString());
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_b = (2*area)/(side_a*Math.sin(angle_C));
-                                                    side_c = Math.sqrt( side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_C));
-                                                    perimeter = side_a + side_b + side_c;
-                                                    angle_B = Math.asin( (side_b*Math.sin(angle_C)) / side_c);
-                                                    angle_A = Math.PI - angle_B - angle_C;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_b.setText(String.valueOf(angle_B));
-                                                    Perimeter.setText(String.valueOf(perimeter));
-                                                }
-                                            }
-                                            else{
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if (Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_b = (2*area)/(side_a*Math.sin(angle_C));
-                                                    side_c = Math.sqrt( side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_C));
-                                                    angle_B = Math.asin( (side_b*Math.sin(angle_C)) / side_c);
-                                                    angle_A = Math.PI - angle_B - angle_C;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_b.setText(String.valueOf(angle_B));
-                                                }
-                                            }
-                                        }
-                                    }//Angle_C
-                                }
-                                else {
-                                    angle_B = Double.parseDouble(Angle_b.getText().toString());
-                                    if (Angle_c.length() == 0)
-                                    {
-                                        if (Area.length() == 0)
-                                        {
-                                            Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                        }
-                                        else {
-                                            area = Double.parseDouble(Area.getText().toString());
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_c = (2*area)/(side_a*Math.sin(angle_B));
-                                                    side_b = Math.sqrt( side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_B));
-                                                    perimeter = side_a + side_b + side_c;
-                                                    angle_A = Math.asin( (side_a*Math.sin(angle_B)) / side_b);
-                                                    angle_C = Math.PI - angle_A - angle_B;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Perimeter.setText(String.valueOf(perimeter));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_c.setText(String.valueOf(angle_C));
-                                                }
-                                            }
-                                            else{
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_c = (2*area)/(side_a*Math.sin(angle_B));
-                                                    side_b = Math.sqrt( side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_B));
-                                                    angle_A = Math.asin( (side_a*Math.sin(angle_B)) / side_b);
-                                                    angle_C = Math.PI - angle_A - angle_B;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_c.setText(String.valueOf(angle_C));
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else {
-                                        angle_C = Double.parseDouble(Angle_c.getText().toString());
-                                        if (Area.length() == 0)
-                                        {
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if (Ha.length() == 0)
-                                                {
-                                                    angle_A = Math.PI - angle_B - angle_C;
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                }
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    angle_A = Math.PI - angle_B - angle_C;
-                                                    side_a = ha/Math.tan(angle_B) + ha/Math.tan(angle_C);
-                                                    area = 1/2 * side_a*ha;
-                                                    side_c = (2*area)/(side_a*Math.sin(angle_B));
-                                                    side_b = Math.sqrt( side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_B));
-                                                    perimeter = side_a + side_b + side_c;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Area.setText(String.valueOf(area));
-                                                    Perimeter.setText(String .valueOf(perimeter));
-                                                }
-                                            }
-                                            else {
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if (Ha.length() == 0)
-                                                {
-                                                    angle_A = Math.PI - angle_B - angle_C;
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                }
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    angle_A = Math.PI - angle_B - angle_C;
-                                                    side_a = ha/Math.tan(angle_B) + ha/Math.tan(angle_C);
-                                                    area = 1/2 * side_a*ha;
-                                                    side_c = (2*area)/(side_a*Math.sin(angle_B));
-                                                    side_b = Math.sqrt( side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_B));
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Area.setText(String.valueOf(area));
-                                                }
-                                            }
-                                        }
-                                        else {
-                                            area = Double.parseDouble(Area.getText().toString());
-                                            if (Perimeter.length() == 0)
-                                            {
-                                                if(Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else{
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_b = (2*area)/(side_a*Math.sin(angle_C));
-                                                    side_c = Math.sqrt( side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_C));
-                                                    perimeter = side_a + side_b + side_c;
-                                                    angle_B = Math.asin( (side_b*Math.sin(angle_C)) / side_c);
-                                                    angle_A = Math.PI - angle_B - angle_C;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_b.setText(String.valueOf(angle_B));
-                                                    Perimeter.setText(String.valueOf(perimeter));
-                                                }
-                                            }
-                                            else{
-                                                perimeter = Double.parseDouble(Perimeter.getText().toString());
-                                                if (Ha.length() == 0)
-                                                    Toast.makeText(getActivity(), "Sir, did you forgot something ?", Toast.LENGTH_LONG).show();
-                                                else {
-                                                    ha = Double.parseDouble(Ha.getText().toString());
-                                                    side_a = (2*area)/ha;
-                                                    side_b = (2*area)/(side_a*Math.sin(angle_C));
-                                                    side_c = Math.sqrt( side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_C));
-                                                    angle_B = Math.asin( (side_b*Math.sin(angle_C)) / side_c);
-                                                    angle_A = Math.PI - angle_B - angle_C;
-
-                                                    Side_a.setText(String.valueOf(side_a));
-                                                    Side_b.setText(String.valueOf(side_b));
-                                                    Side_c.setText(String.valueOf(side_c));
-                                                    Angle_a.setText(String.valueOf(angle_A));
-                                                    Angle_b.setText(String.valueOf(angle_B));
-                                                }
-                                            }
-                                        }
-                                    }//Angle_C
-                                }//Angle_B
-                            }//Angle_c
-                        }
-                        else {
-                            side_c = Double.parseDouble(Side_c.getText().toString());
+                            BinaryCheckList.set(3, 1);
+                        }else if(BinaryCheckList.get(4) == 0){
+                            angel_B = 180 - angel_A - angel_C;
+                            if (angel_B <= 0 || angel_B > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that A+B+C = 180", Toast.LENGTH_LONG).show();
+                            else{
+                                Angle_b.setText(String.valueOf((angel_B*180)/Math.PI));
+                            }
+                            BinaryCheckList.set(4, 1);
+                        }else{
+                            angel_C = 180 - angel_A - angel_B;
+                            if (angel_C <= 0 || angel_C > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that A+B+C = 180", Toast.LENGTH_LONG).show();
+                            else{
+                                Angle_c.setText(String.valueOf(angel_C));
+                            }
+                            BinaryCheckList.set(5, 1);
                         }
                     }
-                    else{
-                        side_b = Double.parseDouble(Side_b.getText().toString());
-
+                    //a2 = b2 + c2 -2bccosA
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(1) + BinaryCheckList.get(2) + BinaryCheckList.get(3) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = Math.sqrt(side_b*side_b + side_c*side_c - 2*side_b*side_c*Math.cos(Math.toRadians(angel_A)));
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(1) == 0){
+                            side_b = Math.sqrt(side_a*side_a - side_c*side_c + 2*side_b*side_c*Math.cos(Math.toRadians(angel_A)));
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(1, 1);
+                        }else if (BinaryCheckList.get(2) == 0){
+                            side_c = Math.sqrt(side_a*side_a - side_b*side_b + 2*side_b*side_c*Math.cos(Math.toRadians(angel_A)));
+                            if (side_c <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_c.setText(String.valueOf(side_c));
+                            BinaryCheckList.set(2, 1);
+                        }else{
+                            angel_A = Math.toDegrees(Math.acos((side_c*side_c + side_b*side_b - side_a*side_a) / (2*side_b*side_c)));
+                            if (angel_A <= 0 || angel_A > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_a.setText(String.valueOf(angel_A));
+                            BinaryCheckList.set(3, 1);
+                        }
                     }
-                }else{
-                    side_a = Double.parseDouble(Side_a.getText().toString());
+                    //b2 = a2 + c2 - 2accosB
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(1) + BinaryCheckList.get(2) + BinaryCheckList.get(4) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = Math.sqrt(side_b*side_b - side_c*side_c + 2*side_a*side_c*Math.cos(Math.toRadians(angel_B)));
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(1) == 0){
+                            side_b = Math.sqrt(side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(Math.toRadians(angel_B)));
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(1, 1);
+                        }else if (BinaryCheckList.get(2) == 0){
+                            side_c = Math.sqrt(side_b*side_b - side_a*side_a + 2*side_a*side_c*Math.cos(Math.toRadians(angel_B)));
+                            if (side_c <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_c.setText(String.valueOf(side_c));
+                            BinaryCheckList.set(2, 1);
+                        }else{
+                            angel_B = Math.toDegrees(Math.acos((side_c*side_c + side_a*side_a - side_b*side_b) / (2*side_a*side_c)));
+                            if (angel_B <= 0 || angel_B > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_b.setText(String.valueOf(angel_B));
+                            BinaryCheckList.set(4, 1);
+                        }
+                    }
+                    //c2 = a2 + b2 - 2abcosC
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(1) + BinaryCheckList.get(2) + BinaryCheckList.get(5) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = Math.sqrt(side_c*side_c - side_b*side_b + 2*side_a*side_b*Math.cos(Math.toRadians(angel_C)));
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(1) == 0){
+                            side_b = Math.sqrt(side_c*side_c - side_a*side_a + 2*side_a*side_b*Math.cos(Math.toRadians(angel_C)));
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(1, 1);
+                        }else if (BinaryCheckList.get(2) == 0){
+                            side_c = Math.sqrt(side_b*side_b + side_a*side_a - 2*side_a*side_b*Math.cos(Math.toRadians(angel_C)));
+                            if (side_c <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_c.setText(String.valueOf(side_c));
+                            BinaryCheckList.set(2, 1);
+                        }else{
+                            angel_C = Math.toDegrees(Math.acos((side_a*side_a + side_b*side_b - side_c*side_c) / (2*side_a*side_b)));
+                            if (angel_C <= 0 || angel_C > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_c.setText(String.valueOf(angel_C));
+                            BinaryCheckList.set(5, 1);
+                        }
+                    }
+                    //a/sinA = b/sinB
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(1) + BinaryCheckList.get(3) + BinaryCheckList.get(4) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = (side_b*Math.sin(Math.toRadians(angel_A))) / Math.sin(Math.toRadians(angel_B));
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(1) == 0){
+                            side_b = (side_a*Math.sin(Math.toRadians(angel_B))) / Math.sin(Math.toRadians(angel_A));
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(1, 1);
+                        }else if (BinaryCheckList.get(3) == 0){
+                            angel_A = Math.toDegrees(Math.asin((side_a*Math.sin(Math.toRadians(angel_B))) / side_b));
+                            if (angel_A <= 0 || angel_A > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_a.setText(String.valueOf(angel_A));
+                            BinaryCheckList.set(3, 1);
+                        }else{
+                            angel_B = Math.toDegrees(Math.asin((side_b*Math.sin(Math.toRadians(angel_A))) / side_a));
+                            if (angel_B <= 0 || angel_B > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_b.setText(String.valueOf((angel_B*180)/Math.PI));
+                            BinaryCheckList.set(4, 1);
+                        }
+                    }
+                    // b/sinB = c/sinC
+                    if (BinaryCheckList.get(1) + BinaryCheckList.get(2) + BinaryCheckList.get(4) + BinaryCheckList.get(5) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(1) == 0){
+                            side_b = (side_c*Math.sin(Math.toRadians(angel_B))) / Math.sin(Math.toRadians(angel_C));
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(1, 1);
+                        }else if (BinaryCheckList.get(2) == 0){
+                            side_c = (side_b*Math.sin(Math.toRadians(angel_C))) / Math.sin(Math.toRadians(angel_B));
+                            if (side_c <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_c.setText(String.valueOf(side_c));
+                            BinaryCheckList.set(2, 1);
+                        }else if (BinaryCheckList.get(4) == 0){
+                            angel_B = Math.toDegrees(Math.asin((side_b*Math.sin(Math.toRadians(angel_C))) / side_c));
+                            if (angel_B <= 0 || angel_B > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_b.setText(String.valueOf((angel_B*180)/Math.PI));
+                            BinaryCheckList.set(4, 1);
+                        }else{
+                            angel_C = Math.toDegrees(Math.asin((side_c*Math.sin(Math.toRadians(angel_B))) / side_b));
+                            if (angel_C <= 0 || angel_C > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_c.setText(String.valueOf(angel_C));
+                            BinaryCheckList.set(5, 1);
+                        }
+                    }
+                    // a/sinA = c/sinC
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(2) + BinaryCheckList.get(3) + BinaryCheckList.get(5) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = (side_c*Math.sin(Math.toRadians(angel_A))) / Math.sin(Math.toRadians(angel_C));
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(2) == 0){
+                            side_c = (side_a*Math.sin(Math.toRadians(angel_C))) / Math.sin(Math.toRadians(angel_A));
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(2, 1);
+                        }else if (BinaryCheckList.get(3) == 0){
+                            angel_A = Math.toDegrees(Math.asin((side_a*Math.sin(Math.toRadians(angel_C))) / side_c));
+                            if (angel_A <= 0 || angel_A > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_a.setText(String.valueOf(angel_A));
+                            BinaryCheckList.set(3, 1);
+                        }else{
+                            angel_C = Math.toDegrees(Math.asin((side_c*Math.sin(Math.toRadians(angel_A))) / side_a));
+                            if (angel_C <= 0 || angel_C > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_c.setText(String.valueOf(angel_C));
+                            BinaryCheckList.set(5, 1);
+                        }
+                    }
+                    // Area = 1/2.a.b.sinC
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(1) + BinaryCheckList.get(5) + BinaryCheckList.get(6) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = (2*area) / (side_b*Math.sin(Math.toRadians(angel_C)));
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(1) == 0){
+                            side_b = (2*area) / (side_a*Math.sin(Math.toRadians(angel_C)));
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(1, 1);
+                        }else if (BinaryCheckList.get(5) == 0){
+                            angel_C = Math.toDegrees(Math.asin((2*area) / (side_a*side_b)));
+                            if (angel_C <= 0 || angel_C > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_c.setText(String.valueOf(angel_C));
+                            BinaryCheckList.set(5, 1);
+                        }else{
+                            area = 0.5*side_a*side_b*Math.sin(Math.toRadians(angel_C));
 
+                            if (area <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Area.setText(String.valueOf(area));
+                            BinaryCheckList.set(6, 1);
+                        }
+                    }
+                    // Area = 1/2.a.c.sinB
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(2) + BinaryCheckList.get(4) + BinaryCheckList.get(6) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = (2*area) / (side_c*Math.sin(Math.toRadians(angel_B)));
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(2) == 0){
+                            side_c = (2*area) / (side_a*Math.sin(Math.toRadians(angel_B)));
+                            if (side_c <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_c.setText(String.valueOf(side_c));
+                            BinaryCheckList.set(2, 1);
+                        }else if (BinaryCheckList.get(4) == 0){
+                            angel_B = Math.toDegrees(Math.asin((2*area) / (side_a*side_c)));
+                            if (angel_B <= 0 || angel_B > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_b.setText(String.valueOf((angel_B*180)/Math.PI));
+                            BinaryCheckList.set(4, 1);
+                        }else{
+                            area = 0.5*side_a*side_c*Math.sin(Math.toRadians(angel_B));
+                            if (area <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Area.setText(String.valueOf(area));
+                            BinaryCheckList.set(6, 1);
+                        }
+                    }
+                    // Area = 1/2.b.c.sinA
+                    if (BinaryCheckList.get(1) + BinaryCheckList.get(2) + BinaryCheckList.get(3) + BinaryCheckList.get(6) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(1) == 0){
+                            side_b = (2*area) / (side_c*Math.sin(Math.toRadians(angel_A)));
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(1, 1);
+                        }else if (BinaryCheckList.get(2) == 0){
+                            side_c = (2*area) / (side_b*Math.sin(Math.toRadians(angel_A)));
+                            if (side_c <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_c.setText(String.valueOf(side_c));
+                            BinaryCheckList.set(2, 1);
+                        }else if (BinaryCheckList.get(3) == 0){
+                            angel_A = Math.toDegrees(Math.asin((2*area) / (side_b*side_c)));
+                            if (angel_A <= 0 || angel_A > 180)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Angle_a.setText(String.valueOf(angel_A));
+                            BinaryCheckList.set(3, 1);
+                        }else{
+                            area = 0.5*side_b*side_c*Math.sin(Math.toRadians(angel_A));
+                            if (area <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Area.setText(String.valueOf(area));
+                            BinaryCheckList.set(6, 1);
+                        }
+                    }
+                    // Area = 1/2.a.ha
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(6) + BinaryCheckList.get(8) == 2){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = (2*area) / ha;
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(6) == 0){
+                            area = 0.5*side_a*ha;
+                            if (area <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Area.setText(String.valueOf(area));
+                            BinaryCheckList.set(6, 1);
+                        }else{
+                            ha = (2*area)/side_a;
+                            if (ha <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Ha.setText(String.valueOf(ha));
+                            BinaryCheckList.set(8, 1);
+                        }
+                    }
+                    // P = a+b+c
+                    if (BinaryCheckList.get(0) + BinaryCheckList.get(1) + BinaryCheckList.get(2) + BinaryCheckList.get(7) == 3){
+                        loop = true;
+                        if (BinaryCheckList.get(0) == 0){
+                            side_a = perimeter - side_b - side_c;
+                            if (side_a <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_a.setText(String.valueOf(side_a));
+                            BinaryCheckList.set(0, 1);
+                        }else if (BinaryCheckList.get(1) == 0) {
+                            side_b = perimeter - side_c - side_a;
+                            if (side_b <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_b.setText(String.valueOf(side_b));
+                            BinaryCheckList.set(1, 1);
+                        }else if (BinaryCheckList.get(2) == 0){
+                            side_c = perimeter - side_a - side_b;
+                            if (side_c <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Side_c.setText(String.valueOf(side_c));
+                            BinaryCheckList.set(2, 1);
+                        }else{
+                            perimeter = side_a + side_b + side_c;
+                            if (perimeter <= 0)
+                                Toast.makeText(getActivity(), "Sir, make sure that all variable you set is right!!", Toast.LENGTH_LONG).show();
+                            else
+                                Perimeter.setText(String.valueOf(perimeter));
+                            BinaryCheckList.set(7, 1);
+                        }
+                    }
                 }
             }
         });
 
+        //0a, 1b, 2c, 3A, 4B, 5C, 6Area, 7Perimeter, 8Ha
         Side_a.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -589,237 +507,32 @@ public class TriangleFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(Side_a.length()>0 && Side_a.isFocused()==true)
-                {
-                    boolean loop = true;
-                    while(loop)
-                    {
-                        loop = false;
-                        String check;
-                        if (Angle_a.length()>0 && Side_b.length()>0) {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_b = Double.parseDouble(Side_b.getText().toString());
-                            double angle_a = Double.parseDouble(Angle_a.getText().toString());
-                            double angle_b = Math.asin((side_b*Math.sin(angle_a))/side_a);
-                            check = String.valueOf(angle_b);
-
-                            if(Angle_b.length() == 0)
-                            {
-                                loop = true;
-                                Angle_b.setText(check);
-                            }
-                            else   if(Math.abs(Double.parseDouble(Angle_b.getText().toString()) - angle_b) > 0.00001)
-                            {
-                                loop = true;
-                                Angle_b.setText(check);
-                            }
-                        }
-                        if(Angle_a.length()>0 && Side_c.length()>0) {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_c = Double.parseDouble(Side_c.getText().toString());
-                            double angle_a = Double.parseDouble(Angle_a.getText().toString());
-                            double angle_c = Math.asin((side_c * Math.sin(angle_a)) / side_a);
-                            check = String.valueOf(angle_c);
-
-                            if(Angle_c.length() == 0){
-                                loop = true;
-                                Angle_c.setText(check);
-                            }
-                            else    if (Math.abs(Double.parseDouble(Angle_c.getText().toString()) - angle_c) > 0.00001) {
-                                loop = true;
-                                Angle_c.setText(check);
-                            }
-                        }
-                        if(Angle_b.length()>0 && Side_b.length() > 0)
-                        {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_b = Double.parseDouble(Side_b.getText().toString());
-                            double angle_b = Double.parseDouble(Angle_b.getText().toString());
-                            double angle_a = Math.asin((side_a * Math.sin(angle_b)) / side_b);
-                            check = String.valueOf(angle_a);
-
-                            if(Angle_a.length() == 0)
-                            {
-                                loop = true;
-                                Angle_a.setText(check);
-                            }
-                            else if(Math.abs(Double.parseDouble(Angle_a.getText().toString()) - angle_a) > 0.00001)
-                            {
-                                loop = true;
-                                Angle_a.setText(check);
-                            }
-                        }
-                        if(Angle_c.length()>0 && Side_c.length() > 0)
-                        {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_c = Double.parseDouble(Side_c.getText().toString());
-                            double angle_c = Double.parseDouble(Angle_c.getText().toString());
-                            double angle_a = Math.asin((side_a * Math.sin(angle_c)) / side_c);
-                            check = String.valueOf(angle_a);
-
-                            if(Angle_a.length() == 0)
-                            {
-                                loop = true;
-                                Angle_a.setText(check);
-                            }
-                            else if(Math.abs(Double.parseDouble(Angle_a.getText().toString()) - angle_a) > 0.00001)
-                            {
-                                loop = true;
-                                Angle_a.setText(check);
-                            }
-                        }
-
-                        if(Perimeter.length()>0 && Side_b.length()>0 )
-                        {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_b = Double.parseDouble(Side_b.getText().toString());
-                            double perimeter = Double.parseDouble(Perimeter.getText().toString());
-                            double side_c = perimeter - side_a - side_b;
-                            check = String.valueOf(side_c);
-
-                            if(Side_c.length() == 0)
-                            {
-                                loop = true;
-                                Side_c.setText(check);
-                            }
-                            else if(Math.abs(Double.parseDouble(Side_c.getText().toString()) - side_c) > 0.00001)
-                            {
-                                loop = true;
-                                Side_c.setText(check);
-                            }
-                        }
-                        if(Perimeter.length()>0 && Side_c.length()>0 )
-                        {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_c = Double.parseDouble(Side_c.getText().toString());
-                            double perimeter = Double.parseDouble(Perimeter.getText().toString());
-                            double side_b = perimeter - side_a - side_c;
-                            check = String.valueOf(side_b);
-
-                            if(Side_b.length() == 0)
-                            {
-                                loop = true;
-                                Side_b.setText(check);
-                            }
-                            else if(Math.abs(Double.parseDouble(Side_b.getText().toString()) - side_b) > 0.00001)
-                            {
-                                loop = true;
-                                Side_b.setText(check);
-                            }
-                        }
-                        if (Side_b.length()>0 && Side_c.length()>0) {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_b = Double.parseDouble(Side_b.getText().toString());
-                            double side_c = Double.parseDouble(Side_c.getText().toString());
-                            double perimeter = side_a + side_b + side_c;
-                            double area = Math.sqrt( ( perimeter*(perimeter-2*side_a) * (perimeter-2*side_b) * (perimeter-2*side_c)) / 16);
-                            check = String.valueOf(perimeter);
-
-                            if(Perimeter.length()==0)
-                            {
-                                loop = true;
-                                Perimeter.setText(check);
-                            }
-                            else    if (Math.abs(Double.parseDouble(Perimeter.getText().toString()) - perimeter) > 0.00001) {
-                                loop = true;
-                                Perimeter.setText(check);
-                            }
-                            check = String.valueOf(area);
-                            if(Area.length() == 0){
-                                loop = true;
-                                Area.setText(check);
-                            }
-                            else if(Math.abs(Double.parseDouble(Area.getText().toString()) - area) > 0.00001){
-                                loop = true;
-                                Area.setText(check);
-                            }
-                        }
-
-                        if (Side_c.length()>0 && Angle_b.length()>0)
-                        {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_c = Double.parseDouble(Side_c.getText().toString());
-                            double angle_b = Double.parseDouble(Angle_b.getText().toString());
-                            double side_b = Math.sqrt(side_a*side_a + side_c*side_c - 2*side_a*side_c*Math.cos(angle_b));
-                            check = String.valueOf(side_c);
-
-                            if(Side_b.length() == 0)
-                            {
-                                loop = true;
-                                Side_b.setText(check);
-                            }
-                            else if(Math.abs(Double.parseDouble(Side_b.getText().toString()) - side_b) > 0.00001)
-                            {
-                                loop = true;
-                                Side_b.setText(check);
-                            }
-                        }
-                        if (Side_b.length()>0 && Angle_c.length()>0)
-                        {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_b = Double.parseDouble(Side_b.getText().toString());
-                            double angle_c = Double.parseDouble(Angle_c.getText().toString());
-                            double side_c = Math.sqrt(side_a*side_a + side_b*side_b - 2*side_a*side_b*Math.cos(angle_c));
-                            check = String.valueOf(side_c);
-
-                            if(Side_c.length() == 0)
-                            {
-                                loop = true;
-                                Side_c.setText(check);
-                            }
-                            else if (Math.abs(Double.parseDouble(Side_c.getText().toString()) - side_c) > 0.00001)
-                            {
-                                loop = true;
-                                Side_c.setText(check);
-                            }
-                        }
-
-                        if (Side_b.length()>0 && Area.length()>0)
-                        {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_b = Double.parseDouble(Side_b.getText().toString());
-                            double area = Double.parseDouble(Area.getText().toString());
-                            double angle_c = Math.asin((2*area)/(side_a*side_b));
-                            check = String.valueOf(angle_c);
-
-                            if (Angle_c.length() == 0)
-                            {
-                                loop =true;
-                                Angle_c.setText(check);
-                            }
-                            else if(Math.abs(Double.parseDouble(Angle_c.getText().toString()) - angle_c) > 0.00001)
-                            {
-                                loop =true;
-                                Angle_c.setText(check);
-                            }
-                        }
-                        if (Side_c.length()>0 && Area.length()>0)
-                        {
-                            double side_a = Double.parseDouble(Side_a.getText().toString());
-                            double side_c = Double.parseDouble(Side_c.getText().toString());
-                            double area = Double.parseDouble(Area.getText().toString());
-                            double angle_b = Math.asin((2*area)/(side_a*side_c));
-                            check = String.valueOf(angle_b);
-
-                            if(Angle_b.length() == 0)
-                            {
-                                loop = true;
-                                Angle_b.setText(check);
-                            }
-                            else if(Math.abs(Double.parseDouble(Angle_b.getText().toString()) - angle_b) > 0.0001)
-                            {
-                                loop = true;
-                                Angle_b.setText(check);
-                            }
-                        }
+                if (Side_a.length() == 0){
+                    BinaryCheckList.set(0, 0);
+                }else{
+                    side_a = Double.parseDouble(String.valueOf(Side_a.getText()));
+                    if(side_a > 0){
+                        BinaryCheckList.set(0, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0", Toast.LENGTH_LONG).show();
+                        Side_a.setText("0.0");
                     }
-
                 }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if (Side_a.length() == 0){
+                    BinaryCheckList.set(0, 0);
+                }else{
+                    side_a = Double.parseDouble(String.valueOf(Side_a.getText()));
+                    if(side_a > 0){
+                        BinaryCheckList.set(0, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0", Toast.LENGTH_LONG).show();
+                        Side_a.setText("0.0");
+                    }
+                }
             }
         });
         Side_b.addTextChangedListener(new TextWatcher() {
@@ -830,12 +543,68 @@ public class TriangleFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (Side_b.length() == 0){
+                    BinaryCheckList.set(1, 0);
+                }else{
+                    side_b = Double.parseDouble(String.valueOf(Side_b.getText()));
+                    if(side_b > 0){
+                        BinaryCheckList.set(1, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0", Toast.LENGTH_LONG).show();
+                        Side_b.setText("0.0");
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (Side_b.length() == 0){
+                    BinaryCheckList.set(1, 0);
+                }else{
+                    side_b = Double.parseDouble(String.valueOf(Side_b.getText()));
+                    if(side_b > 0){
+                        BinaryCheckList.set(1, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0", Toast.LENGTH_LONG).show();
+                        Side_b.setText("0.0");
+                    }
+                }
+            }
+        });
+        Side_c.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (Side_c.length() == 0){
+                    BinaryCheckList.set(2, 0);
+                }else{
+                    side_c = Double.parseDouble(String.valueOf(Side_c.getText()));
+                    if(side_c > 0){
+                        BinaryCheckList.set(2, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0", Toast.LENGTH_LONG).show();
+                        Side_c.setText("0.0");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (Side_c.length() == 0){
+                    BinaryCheckList.set(2, 0);
+                }else{
+                    side_c = Double.parseDouble(String.valueOf(Side_c.getText()));
+                    if(side_c > 0){
+                        BinaryCheckList.set(2, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0", Toast.LENGTH_LONG).show();
+                        Side_c.setText("0.0");
+                    }
+                }
             }
         });
         Angle_a.addTextChangedListener(new TextWatcher() {
@@ -846,12 +615,34 @@ public class TriangleFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (Angle_a.length() == 0){
+                    BinaryCheckList.set(3, 0);
+                }else{
+                    angel_A = Double.parseDouble(String.valueOf(Angle_a.getText()));
+                    if(angel_A > 0 && angel_A < 180){
+                        BinaryCheckList.set(3, 1);
+                    }else{
 
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Angle_a.setText("0.0");
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (Angle_a.length() == 0){
+                    BinaryCheckList.set(3, 0);
+                }else{
+                    angel_A = Double.parseDouble(String.valueOf(Angle_a.getText()));
+                    if(angel_A > 0 && angel_A < 180){
+                        BinaryCheckList.set(3, 1);
+                    }else{
 
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Angle_a.setText("0.0");
+                    }
+                }
             }
         });
         Angle_b.addTextChangedListener(new TextWatcher() {
@@ -862,12 +653,32 @@ public class TriangleFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (Angle_b.length() == 0){
+                    BinaryCheckList.set(4, 0);
+                }else{
+                    angel_B = Double.parseDouble(String.valueOf(Angle_b.getText()));
+                    if (angel_B > 0 && angel_B < 180){
+                        BinaryCheckList.set(4, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Angle_b.setText("0.0");
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if (Angle_b.length() == 0){
+                    BinaryCheckList.set(4, 0);
+                }else{
+                    angel_B = Double.parseDouble(String.valueOf(Angle_b.getText()));
+                    if (angel_B > 0 && angel_B < 180){
+                        BinaryCheckList.set(4, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Angle_b.setText("0.0");
+                    }
+                }
             }
         });
         Angle_c.addTextChangedListener(new TextWatcher() {
@@ -878,12 +689,32 @@ public class TriangleFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (Angle_c.length() == 0){
+                    BinaryCheckList.set(5, 0);
+                }else{
+                    angel_C = Double.parseDouble(String.valueOf(Angle_c.getText()));
+                    if (angel_C > 0 && angel_C < 180){
+                        BinaryCheckList.set(5, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Angle_c.setText("0.0");
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if (Angle_c.length() == 0){
+                    BinaryCheckList.set(5, 0);
+                }else{
+                    angel_C = Double.parseDouble(String.valueOf(Angle_c.getText()));
+                    if (angel_C > 0 && angel_C < 180){
+                        BinaryCheckList.set(5, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Angle_c.setText("0.0");
+                    }
+                }
             }
         });
         Area.addTextChangedListener(new TextWatcher() {
@@ -894,12 +725,32 @@ public class TriangleFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (Area.length() == 0){
+                    BinaryCheckList.set(6, 0);
+                }else{
+                    area = Double.parseDouble(String.valueOf(Area.getText()));
+                    if (area > 0){
+                        BinaryCheckList.set(6, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Area.setText("0.0");
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
+                if (Area.length() == 0){
+                    BinaryCheckList.set(6, 0);
+                }else{
+                    area = Double.parseDouble(String.valueOf(Area.getText()));
+                    if (area > 0){
+                        BinaryCheckList.set(6, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Area.setText("0.0");
+                    }
+                }
             }
         });
         Perimeter.addTextChangedListener(new TextWatcher() {
@@ -910,12 +761,68 @@ public class TriangleFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
+                if (Perimeter.length() == 0){
+                    BinaryCheckList.set(7, 0);
+                }else{
+                    perimeter = Double.parseDouble(String.valueOf(Perimeter.getText()));
+                    if (perimeter > 0){
+                        BinaryCheckList.set(7, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Perimeter.setText("0.0");
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
+                if (Perimeter.length() == 0){
+                    BinaryCheckList.set(7, 0);
+                }else{
+                    perimeter = Double.parseDouble(String.valueOf(Perimeter.getText()));
+                    if (perimeter > 0){
+                        BinaryCheckList.set(7, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Perimeter.setText("0.0");
+                    }
+                }
+            }
+        });
+        Ha.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (Ha.length() == 0){
+                    BinaryCheckList.set(8, 0);
+                }else{
+                    ha = Double.parseDouble(String.valueOf(Ha.getText()));
+                    if (ha > 0){
+                        BinaryCheckList.set(8, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Ha.setText("0.0");
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (Ha.length() == 0){
+                    BinaryCheckList.set(8, 0);
+                }else{
+                    ha = Double.parseDouble(String.valueOf(Ha.getText()));
+                    if (ha > 0){
+                        BinaryCheckList.set(8, 1);
+                    }else{
+                        Toast.makeText(getActivity(), "Sir, the value must biger than 0 or smaller than 180", Toast.LENGTH_LONG).show();
+                        Ha.setText("0.0");
+                    }
+                }
             }
         });
 
@@ -946,16 +853,6 @@ public class TriangleFragment extends Fragment {
         mListener = null;
     }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
